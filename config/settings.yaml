@@ -12,10 +12,10 @@ symbols: [SPY, QQQ, AAPL]
 
 strategy:
   name: orb              # opening-range breakout
-  range_minutes: 15      # opening range length
-  target_r: 2.0          # profit target as a multiple of risk
+  range_minutes: 30      # opening range length (30 beat 15 in the Nov 2026 sweep)
+  target_r: 1.0          # profit target as a multiple of risk (1R best in sweep)
   stop: range            # "range" = other side of the range, "mid" = range midpoint
-  allow_short: true
+  allow_short: false     # longs only (shorts lost money in sweep)
 
 risk:
   max_position_usd: 25000      # cap on any single position's value
@@ -31,6 +31,6 @@ costs:
   slippage_bps: 2              # assumed slippage per fill, in basis points
 
 backtest:
-  start: 2026-10-01
+  start: 2025-11-12   # one year
   end: 2026-11-12
   starting_equity: 25000
