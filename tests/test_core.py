@@ -85,3 +85,12 @@ def test_live_requires_confirm(tmp_path):
     p.write_text("mode: live\nbroker: ibkr\n")
     with pytest.raises(ValueError):
         config.load(p)
+
+
+def test_target_fill_has_no_slippage():
+    s = settings()
+    s.raw["costs"]["slippage_bps"] = 10
+    seq = flat(15) + [(100, 101.2, 100, 101)] + [(101, 101.5, 100.8, 101.2)] + [(101.2, 105, 101.1, 104.5)] + flat(360, 104)
+    t = run({D: {"SPY": bars("SPY", seq)}}, s)[0]
+    assert t.exit_reason == "target" and t.exit == pytest.approx(104.0)
+    assert t.pnl == pytest.approx(t.gross - t.fees - t.slippage, abs=0.02)
