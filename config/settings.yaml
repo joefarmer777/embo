@@ -1,0 +1,36 @@
+# embo settings. Paper is the default. Going live needs BOTH mode: live AND live_confirm: true.
+mode: paper
+live_confirm: false
+
+broker: ibkr
+ibkr:
+  host: 127.0.0.1
+  port: 4002        # IB Gateway paper 4002, live 4001 (TWS: 7497 / 7496)
+  client_id: 17
+
+symbols: [SPY, QQQ, AAPL]
+
+strategy:
+  name: orb              # opening-range breakout
+  range_minutes: 15      # opening range length
+  target_r: 2.0          # profit target as a multiple of risk
+  stop: range            # "range" = other side of the range, "mid" = range midpoint
+  allow_short: true
+
+risk:
+  max_position_usd: 25000      # cap on any single position's value
+  risk_per_trade_usd: 250      # loss if the stop is hit (before slippage)
+  daily_loss_limit_usd: 500    # hit this and trading stops for the day
+  max_trades_per_day: 6
+  no_entry_last_minutes: 15    # no new entries this close to the bell
+  flatten_minutes_before_close: 5
+
+costs:
+  commission_per_share: 0.005  # IBKR Pro fixed
+  min_commission: 1.0
+  slippage_bps: 2              # assumed slippage per fill, in basis points
+
+backtest:
+  start: 2026-10-01
+  end: 2026-11-12
+  starting_equity: 25000
